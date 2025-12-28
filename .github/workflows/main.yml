@@ -35,6 +35,6 @@ jobs:
           docker stop backend || true
           docker rm backend || true
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
-          docker run -d --name backend -p 3000:3000 ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
+          docker run -d --name backend --env-file /opt/backend/.env -p 3000:3000 ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
           docker image prune -f
           sudo systemctl reload nginx
