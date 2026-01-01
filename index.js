@@ -1,6 +1,7 @@
 const express = require('express');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 require('dotenv').config();
+const db = require('mysql2/promise');
 
 const app = express();
 
@@ -34,6 +35,30 @@ app.get('/send', async (req, res) => {
   );
 
   res.send('Sent! Please check in the bucket the file must be in!');
+});
+
+app.get('/db', async (req, res) => {
+  const database = db.createPool(
+    {
+      host: process.env.AWS_DATABASE_HOST,
+      database: process.env.AWS_DATABASE_NAME,
+      port: 3306,
+      password: process.env.AWS_DATABASE_PASSWORD,
+      user: process.env.AWS_USER,
+      connectionLimit: 10,
+      queueLimit: 0
+    }
+  );
+
+  try {
+   await database.getConnection() 
+  } catch (error) {
+    console.error(error);
+  }
+
+  await database.query('CREATE DATABASE ')
+
+  res.send(row);
 });
 
 app.listen(3000, '0.0.0.0', () => {
