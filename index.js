@@ -56,7 +56,25 @@ app.get('/db', async (req, res) => {
     console.error(error);
   }
 
-  await database.query('CREATE DATABASE ')
+  await database.query(
+    `
+      CREATE TABLE IF NOT EXISTS employee_details
+      (
+        id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        name VARCHAR(20) NOT NULL,
+        age INT NOT NULL
+      );
+    `
+  );
+
+  await database.query(
+    `
+      INSERT INTO employee_details
+      (name, age)
+      VALUES
+      ('Niranjan Patil', 25);
+    `
+  );
 
   res.send(row);
 });
